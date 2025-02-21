@@ -2,23 +2,21 @@ from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery
 from aiogram import Router, F
 from aiogram import Bot, Dispatcher, types
-from telethon import TelegramClient
-from config import API_ID, API_HASH
+
 
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 import app.keyboards as kb
-from telethon import TelegramClient
+
 from aiogram.types import BufferedInputFile
 from config import GROUP_ID,KAT2_GROUP_ID,KAT3_GROUP_ID
-import app.database as db
+
 from datetime import datetime
 
 
 router = Router()
 
-# Initialize database
-db.init_db()
+
 
 # Dictionary to store temporary messages
 user_messages = {}
