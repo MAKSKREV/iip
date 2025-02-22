@@ -89,7 +89,7 @@ async def handle_kat1_text(message: Message, state: FSMContext, bot: Bot):
 async def handle_plus1(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     await callback.message.answer("Отправьте фото/видео и текст одним сообщением")
-    await callback.message.answer("❗❗ПОСТЫ БУДУТ ПРИНИМАТЬСЯ , ТОЛЬКО С КООРДИНАТАМИ/АДРЕСОМ , ОСТАЛЬНОЕ ОТКЛОНИТЬСЯ❗❗")
+    await callback.message.answer("❗❗ПОСТЫ БУДУТ ПРИНИМАТЬСЯ , ТОЛЬКО С КООРДИНАТАМИ/АДРЕСОМ , ОСТАЛЬНОЕ ОТКЛОНИТСЯ❗❗")
     await state.set_state(AuthState.waiting_for_plus1_content)
 
 
@@ -222,7 +222,7 @@ async def handle_plus1_text(message: Message, state: FSMContext, bot: Bot):
 async def handle_plus3(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
     await callback.message.answer("Отправьте фото и текст одним сообщением")
-    await callback.message.answer("❗❗ГРАФФИТИ БУДУТ ПРИНИМАТЬСЯ , ТОЛЬКО С КООРДИНАТАМИ/АДРЕСОМ , ОСТАЛЬНОЕ ОТКЛОНИТЬСЯ❗❗")
+    await callback.message.answer("❗❗ГРАФФИТИ БУДУТ ПРИНИМАТЬСЯ , ТОЛЬКО С КООРДИНАТАМИ/АДРЕСОМ , ОСТАЛЬНОЕ ОТКЛОНИТСЯ❗❗")
     await state.set_state(AuthState.waiting_for_plus3_content)
 
 @router.message(AuthState.waiting_for_plus3_content, F.photo)
