@@ -316,6 +316,11 @@ async def handle_plus2(callback: CallbackQuery):
     with open("app/foto/fff.jpg", "rb") as file:
         photo = BufferedInputFile(file.read(), filename="photo.jpg")
         await callback.message.answer_photo(photo)
+    await callback.message.answer('На перекрестке, на стороне возле дома 9-парковая 49к2')
+    with open("app/foto/ppp.jpg", "rb") as file:
+        photo = BufferedInputFile(file.read(), filename="photo.jpg")
+        await callback.message.answer_photo(photo)
+    
     
 
 
