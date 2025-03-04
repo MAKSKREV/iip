@@ -304,11 +304,7 @@ async def handle_plus2(callback: CallbackQuery):
     with open("app/foto/bb.jpg", "rb") as file:
         photo = BufferedInputFile(file.read(), filename="photo.jpg")
         await callback.message.answer_photo(photo)
-    await callback.message.answer('Щелковское шоссе 47, Щелковское шоссе 45а. Подземный переход')
-    with open("app/foto/vid.mp4", "rb") as file:
-        video = BufferedInputFile(file.read(), filename="vid.mp4")
-        await callback.message.answer_video(video)
-    await callback.message.answer('6я парковая 29А')
+        await callback.message.answer('6я парковая 29А')
     with open("app/foto/ff.jpg", "rb") as file:
         photo = BufferedInputFile(file.read(), filename="photo.jpg")
         await callback.message.answer_photo(photo)
@@ -321,6 +317,41 @@ async def handle_plus2(callback: CallbackQuery):
         photo = BufferedInputFile(file.read(), filename="photo.jpg")
         await callback.message.answer_photo(photo)
     
+    await callback.message.answer('5 парковая 64')
+    with open("app/foto/bbuuu.jpg", "rb") as file:
+        photo = BufferedInputFile(file.read(), filename="photo.jpg")
+        await callback.message.answer_photo(photo)
+    await callback.message.answer('3-я парковая улица. дом 39. корпус 1')
+    with open("app/foto/yxx.jpg", "rb") as file:
+        photo = BufferedInputFile(file.read(), filename="photo.jpg")
+        await callback.message.answer_photo(photo)
+    await callback.message.answer('Щелковский шоссе 81')
+    with open("app/foto/axx.jpg", "rb") as file:
+        photo = BufferedInputFile(file.read(), filename="photo.jpg")
+        await callback.message.answer_photo(photo)
+    await callback.message.answer('Измайловский проспект, 49')
+    with open("app/foto/exx.jpg", "rb") as file:
+        photo = BufferedInputFile(file.read(), filename="photo.jpg")
+        await callback.message.answer_photo(photo)
+    await callback.message.answer('Щелковское шоссе 69 , Пятерочка')
+    with open("app/foto/xexe.jpg", "rb") as file:
+        photo = BufferedInputFile(file.read(), filename="photo.jpg")
+        await callback.message.answer_photo(photo)
+    await callback.message.answer('9 парковка улица 57(2) , за домом')
+    with open("app/foto/xaxa.jpg", "rb") as file:
+        photo = BufferedInputFile(file.read(), filename="photo.jpg")
+        await callback.message.answer_photo(photo)
+    await callback.message.answer('Сиреневый бульвар дом 40 корпус 1')
+    with open("app/foto/xsxs.jpg", "rb") as file:
+        photo = BufferedInputFile(file.read(), filename="photo.jpg")
+        await callback.message.answer_photo(photo)
+    await callback.message.answer('Щелковское шоссе 47, Щелковское шоссе 45а. Подземный переход')
+    with open("app/foto/vid.mp4", "rb") as file:
+        video = BufferedInputFile(file.read(), filename="vid.mp4")
+        await callback.message.answer_video(video)
+    await callback.message.answer('5-я Парковая улица, 57, обе автобусные остановки')
+    await callback.message.answer('Видео или фото граффити выше нет')
+
     
 
 
