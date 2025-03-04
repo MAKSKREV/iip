@@ -345,13 +345,14 @@ async def handle_plus2(callback: CallbackQuery):
     with open("app/foto/xsxs.jpg", "rb") as file:
         photo = BufferedInputFile(file.read(), filename="photo.jpg")
         await callback.message.answer_photo(photo)
+
+    await callback.message.answer('5-я Парковая улица, 57, обе автобусные остановки')
+    await callback.message.answer('Видео или фото граффити выше нет')
+
     await callback.message.answer('Щелковское шоссе 47, Щелковское шоссе 45а. Подземный переход')
     with open("app/foto/vid.mp4", "rb") as file:
         video = BufferedInputFile(file.read(), filename="vid.mp4")
         await callback.message.answer_video(video)
-    await callback.message.answer('5-я Парковая улица, 57, обе автобусные остановки')
-    await callback.message.answer('Видео или фото граффити выше нет')
-
     
 
 
