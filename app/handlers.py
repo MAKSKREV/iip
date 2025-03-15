@@ -65,10 +65,10 @@ async def handle_kat1_media(message: Message, state: FSMContext, bot: Bot):
             photo_bytes = await bot.download_file(photo_file.file_path)
             media_files.append(BufferedInputFile(photo_bytes.read(), filename="photo.jpg"))
     if message.video:
-        for video in message.video:
-            video_file = await bot.get_file(video.file_id)
-            video_bytes = await bot.download_file(video_file.file_path)
-            media_files.append(BufferedInputFile(video_bytes.read(), filename="video.mp4"))
+        video_file = await bot.get_file(message.video.file_id)
+        video_bytes = await bot.download_file(video_file.file_path)
+        media_files.append(BufferedInputFile(video_bytes.read(), filename="video.mp4"))
+
 
 
 
@@ -80,19 +80,19 @@ async def handle_kat1_media(message: Message, state: FSMContext, bot: Bot):
     from config import KAT3_GROUP_ID
     caption = message.caption or ""
     for media in media_files:
-        if isinstance(media, BufferedInputFile):
-            if media.filename == "photo.jpg":
-                await bot.send_photo(
-                    chat_id=KAT3_GROUP_ID,
-                    photo=media,
-                    caption=caption
-                )
-            elif media.filename == "video.mp4":
-                await bot.send_video(
-                    chat_id=KAT3_GROUP_ID,
-                    video=media,
-                    caption=caption
-                )
+        if media.filename == "photo.jpg":
+            await bot.send_photo(
+                chat_id=KAT3_GROUP_ID,
+                photo=media,
+                caption=caption
+            )
+        elif media.filename == "video.mp4":
+            await bot.send_video(
+                chat_id=KAT3_GROUP_ID,
+                video=media,
+                caption=caption
+            )
+
 
 
 
