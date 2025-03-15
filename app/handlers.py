@@ -51,47 +51,47 @@ async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
         await callback.message.answer('Отправьте текст с фото')
         await state.set_state(AuthState.waiting_for_kat1_content)
 
+
     elif category == 'kat2':
         await callback.message.answer('Напишите ваш тэг и причину разбана:')
         await state.set_state(AuthState.waiting_for_kat2_content)
 
 
-@router.message(AuthState.waiting_for_kat1_content, F.photo | F.video)
-async def handle_kat1_media(message: Message, state: FSMContext, bot: Bot):
-    media_files = []
-    if message.photo:
-        for photo in message.photo:
-            photo_file = await bot.get_file(photo.file_id)
-            photo_bytes = await bot.download_file(photo_file.file_path)
-            media_files.append(BufferedInputFile(photo_bytes.read(), filename="photo.jpg"))
-    if message.video:
-        video_file = await bot.get_file(message.video.file_id)
-        video_bytes = await bot.download_file(video_file.file_path)
-        media_files.append(BufferedInputFile(video_bytes.read(), filename="video.mp4"))
-
-
-
-
-
-
+@router.message(AuthState.waiting_for_kat1_content, F.photo)
+async def handle_kat1_photo(message: Message, state: FSMContext, bot: Bot):
+    photo = message.photo[-1]
     caption = message.caption or ""
     photo_file = await bot.get_file(photo.file_id)
     photo_bytes = await bot.download_file(photo_file.file_path)
-    from config import KAT3_GROUP_ID
-    caption = message.caption or ""
-    for media in media_files:
-        if media.filename == "photo.jpg":
-            await bot.send_photo(
-                chat_id=KAT3_GROUP_ID,
-                photo=media,
-                caption=caption
-            )
-        elif media.filename == "video.mp4":
-            await bot.send_video(
-                chat_id=KAT3_GROUP_ID,
-                video=media,
-                caption=caption
-            )
+    
+    # Store the photo in temporary storage
+    timestamp = datetime.now().timestamp()
+    key = f"{message.from_user.id}_{message.chat.id}_{timestamp}"
+    if key not in user_messages:
+        user_messages[key] = {
+            'message': message,
+            'photo': photo,
+            'caption': caption,
+            'timestamp': datetime.now(),
+            'key': key,
+            'user_id': message.from_user.id,
+            'chat_id': message.chat.id
+        }
+        print(f"Stored photo message before forwarding to group with key {key}")
+
+    # Send to group
+    await bot.send_photo(
+        chat_id=KAT3_GROUP_ID,
+        photo=BufferedInputFile(photo_bytes.read(), filename="photo.jpg"),
+        caption=caption
+    )
+    
+    await message.answer("Сообщение успешно отправлено!")
+    await state.clear()
+    await bot.send_message(
+        chat_id=message.from_user.id,
+        text=f"ID: {message.from_user.id}"
+    )
 
 
 
@@ -99,22 +99,74 @@ async def handle_kat1_media(message: Message, state: FSMContext, bot: Bot):
 
 
     
-    await message.answer("Ваше сообщение успешно отправлено!")
+
+@router.message(AuthState.waiting_for_kat1_content, F.video)
+async def handle_kat1_video(message: Message, state: FSMContext, bot: Bot):
+    video = message.video
+    caption = message.caption or ""
+    video_file = await bot.get_file(video.file_id)
+    video_bytes = await bot.download_file(video_file.file_path)
+    
+    # Store the video in temporary storage
+    timestamp = datetime.now().timestamp()
+    key = f"{message.from_user.id}_{message.chat.id}_{timestamp}"
+    if key not in user_messages:
+        user_messages[key] = {
+            'message': message,
+            'video': video,
+            'caption': caption,
+            'timestamp': datetime.now(),
+            'key': key,
+            'user_id': message.from_user.id,
+            'chat_id': message.chat.id
+        }
+        print(f"Stored video message before forwarding to group with key {key}")
+
+    # Send to group
+    await bot.send_video(
+        chat_id=KAT3_GROUP_ID,
+        video=BufferedInputFile(video_bytes.read(), filename="video.mp4"),
+        caption=caption
+    )
+    
+    await message.answer("Сообщение успешно отправлено!")
     await state.clear()
+    await bot.send_message(
+        chat_id=message.from_user.id,
+        text=f"ID: {message.from_user.id}"
+    )
+
 
 @router.message(AuthState.waiting_for_kat1_content, F.text)
 async def handle_kat1_text(message: Message, state: FSMContext, bot: Bot):
-    from config import KAT3_GROUP_ID
     text = message.text
-    await bot.send_message(
-        chat_id=KAT3_GROUP_ID,
-        text=f"Сообщение из предложки:{text}"
-    )
-    await state.clear()
-
     
-    await message.answer("Ваше сообщение успешно отправлено!")
+    timestamp = datetime.now().timestamp()
+    key = f"{message.from_user.id}_{message.chat.id}_{timestamp}"
+    if key not in user_messages:
+        user_messages[key] = {
+            'message': message,
+            'text': text,
+            'timestamp': datetime.now(),
+            'key': key,
+            'user_id': message.from_user.id,
+            'chat_id': message.chat.id
+        }
+        print(f"Stored text message before forwarding to group with key {key}")
+
+    # Send to group
+    await bot.send_message(
+        chat_id=GROUP_ID,
+        text=f"Текст сообщения:\n{text}"
+    )
+    
+    await message.answer("Текст успешно отправлен!")
     await state.clear()
+    await bot.send_message(
+        chat_id=message.from_user.id,
+        text=f"ID: {message.from_user.id}"
+    )
+
 
 
 @router.callback_query(F.data == 'plus1')
