@@ -56,18 +56,39 @@ async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
         await state.set_state(AuthState.waiting_for_kat2_content)
 
 
-@router.message(AuthState.waiting_for_kat1_content, F.photo)
-async def handle_kat1_photo(message: Message, state: FSMContext, bot: Bot):
-    photo = message.photo[-1]
+@router.message(AuthState.waiting_for_kat1_content, F.photo | F.video)
+async def handle_kat1_media(message: Message, state: FSMContext, bot: Bot):
+    media_files = []
+    if message.photo:
+        for photo in message.photo:
+            photo_file = await bot.get_file(photo.file_id)
+            photo_bytes = await bot.download_file(photo_file.file_path)
+            media_files.append(BufferedInputFile(photo_bytes.read(), filename="photo.jpg"))
+    if message.video:
+        video = message.video
+        video_file = await bot.get_file(video.file_id)
+        video_bytes = await bot.download_file(video_file.file_path)
+        media_files.append(BufferedInputFile(video_bytes.read(), filename="video.mp4"))
+
     caption = message.caption or ""
     photo_file = await bot.get_file(photo.file_id)
     photo_bytes = await bot.download_file(photo_file.file_path)
     from config import KAT3_GROUP_ID
-    await bot.send_photo(
-        chat_id=KAT3_GROUP_ID,
-        photo=BufferedInputFile(photo_bytes.read(), filename="photo.jpg"),
-        caption=caption
-    )
+    caption = message.caption or ""
+    for media in media_files:
+        if isinstance(media, BufferedInputFile):
+            await bot.send_photo(
+                chat_id=KAT3_GROUP_ID,
+                photo=media,
+                caption=caption
+            )
+        else:
+            await bot.send_video(
+                chat_id=KAT3_GROUP_ID,
+                video=media,
+                caption=caption
+            )
+
     
     await message.answer("Ваше сообщение успешно отправлено!")
     await state.clear()
@@ -80,6 +101,8 @@ async def handle_kat1_text(message: Message, state: FSMContext, bot: Bot):
         chat_id=KAT3_GROUP_ID,
         text=f"Сообщение из предложки:{text}"
     )
+    await state.clear()
+
     
     await message.answer("Ваше сообщение успешно отправлено!")
     await state.clear()
