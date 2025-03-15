@@ -48,7 +48,9 @@ async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
     if category == 'kat0':
         await callback.message.answer('Выберите вариант:', reply_markup=kb.vopros1)
     elif category == 'kat1':
-        await callback.message.answer('Отправьте текст с фото')
+
+        await callback.message.answer('Отправьте текст с фото/текст с видео')
+        await message.answer("❗❗В сообщении может присутствовать максимум 1 видео или 1 фото❗❗")
         await state.set_state(AuthState.waiting_for_kat1_content)
 
 
