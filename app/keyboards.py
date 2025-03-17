@@ -19,6 +19,12 @@ vopros1 = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Не
 
                                      
 ])
+modex= InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Незакрашенные граффити',callback_data='modex0')],
+                                     [InlineKeyboardButton(text='Отправить координаты граффити',callback_data='modex1')],
+                                      [InlineKeyboardButton(text='Я закрасил',callback_data='modex2')],
+
+                                     
+])
 
 
 vopros2 = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Да',callback_data='plus22')],
