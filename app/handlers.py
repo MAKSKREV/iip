@@ -38,6 +38,8 @@ async def cmd_start(message: Message, state: FSMContext):
     print(f'ID:{message.from_user.id} Имя:{message.from_user.first_name}')
     await message.answer(f'Привет {message.from_user.first_name}')
     await message.answer('Выбери один из пунктов:', reply_markup=kb.vibor)
+    if message.from_user.id ==5176998143:
+        await message.answer(f'Привет админ')
 
 @router.callback_query(F.data.startswith('kat'))
 async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
