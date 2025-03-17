@@ -35,12 +35,27 @@ class AuthState(StatesGroup):
 
 @router.message(CommandStart())
 async def cmd_start(message: Message, state: FSMContext):
-    if message.from_user.id ==5176998143:
+    if message.from_user.id ==5176998143 or message.from_user.id==8013867574:
         await message.answer(f'Привет админ')
         await message.answer('Выбери один из пунктов:', reply_markup=kb.modex)
     else:
         await message.answer(f'Привет {message.from_user.first_name}')
         await message.answer('Выбери один из пунктов:', reply_markup=kb.vibor)
+
+@router.callback_query(F.data.startswith('modex'))
+async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
+    category = callback.data
+    await callback.answer()
+    await state.update_data(selected_category=category)
+    
+    if category == 'modex0':
+        await callback.message.answer('Пробив ещё не работает,жду хоть какое то бд')
+    elif category == 'modex1':
+        await callback.message.answer('Снос мб на выхах сделаю')
+    
+
+
+
 
 
 @router.callback_query(F.data.startswith('kat'))

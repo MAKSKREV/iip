@@ -21,7 +21,7 @@ vopros1 = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Не
 ])
 modex= InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Пробив тг',callback_data='modex0')],
                                      [InlineKeyboardButton(text='Снос тг',callback_data='modex1')],
-                                      [InlineKeyboardButton(text='Я закрасил',callback_data='modex2')],
+                                     [InlineKeyboardButton(text='Граффити',callback_data='kat0')],
                                      [InlineKeyboardButton(text='Предложка',callback_data='kat1')],
                                      [InlineKeyboardButton(text='Разбан в чате', callback_data='kat2')],
 
