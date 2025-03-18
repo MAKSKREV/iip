@@ -435,7 +435,7 @@ async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
         await callback.message.answer('Пробив ещё не работает, жду хоть какое-то БД')
     elif category == 'modex1':
         await state.set_state(AuthState.waiting_for_username)
-        await callback.message.answer("Пожалуйста, введите ваше имя пользователя:")
+        await callback.message.answer("Введите юзер который надо снести")
 
 @router.message(AuthState.waiting_for_username)
 async def process_username(message: Message, state: FSMContext):
@@ -443,7 +443,7 @@ async def process_username(message: Message, state: FSMContext):
     await state.update_data(username=username)
     
     await state.set_state(AuthState.waiting_for_tg_id)
-    await message.answer("Пожалуйста, введите ваш TG ID:")
+    await message.answer("Введите тг айди")
 
 @router.message(AuthState.waiting_for_tg_id)
 async def process_tg_id(message: Message, state: FSMContext):
@@ -451,7 +451,7 @@ async def process_tg_id(message: Message, state: FSMContext):
     await state.update_data(tg_id=tg_id)
     
     await state.set_state(AuthState.waiting_for_chat_link)
-    await message.answer("Пожалуйста, введите ссылку на чат:")
+    await message.answer("Введите ссылку на чат:")
 
 @router.message(AuthState.waiting_for_chat_link)
 async def process_chat_link(message: Message, state: FSMContext):
@@ -459,7 +459,7 @@ async def process_chat_link(message: Message, state: FSMContext):
     await state.update_data(chat_link=chat_link)
     
     await state.set_state(AuthState.waiting_for_violation_link)
-    await message.answer("Пожалуйста, введите ссылку на нарушение:")
+    await message.answer("Введите ссылку на нарушение:")
 
 @router.message(AuthState.waiting_for_violation_link)
 async def process_violation_link(message: Message, state: FSMContext):
