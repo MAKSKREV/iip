@@ -436,6 +436,9 @@ async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
     elif category == 'modex1':
         await state.set_state(AuthState.waiting_for_username)
         await callback.message.answer("Введите юзер который надо снести")
+    elif category == 'modex3':
+        await state.set_state(AuthState.waiting_for_username)
+        await callback.message.answer("Не работает ещё")
 
 @router.message(AuthState.waiting_for_username)
 async def process_username(message: Message, state: FSMContext):
