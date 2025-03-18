@@ -9,7 +9,7 @@ from app.handlers import router
 
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
-
+bot.parse_mode = 'html'
 
 
 logging.basicConfig(level=logging.INFO)
