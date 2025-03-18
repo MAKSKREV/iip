@@ -14,15 +14,15 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
-import os
+
 
 
 from datetime import datetime
-import json
-import logging
-import re
 
-import requests
+import logging
+
+
+
 from aiogram import Bot, Dispatcher, types
 
 import config
