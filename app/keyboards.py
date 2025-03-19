@@ -29,7 +29,7 @@ modex= InlineKeyboardMarkup(inline_keyboard=[
 ])
 snos = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='ЗА СПАМ, РЕКЛАМУ',callback_data='snos0')],
                                      [InlineKeyboardButton(text='ЗА ДОКСUНГ',callback_data='snos1')],
-                                     [InlineKeyboardButton(text='ЗА ТРОЛЛUНГ(ОСК',callback_data='snos2')],
+                                     [InlineKeyboardButton(text='ЗА ТРОЛЛUНГ(ОСК)',callback_data='snos2')],
 
                                      
 ])
