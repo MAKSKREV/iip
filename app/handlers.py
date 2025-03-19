@@ -512,18 +512,18 @@ async def process_violation_link(message: Message, state: FSMContext):
     }
 
     for sender_email, sender_password in senders.items():
+        await message.answer(f"Атака началась!!")
         for receiver in receivers:
             comp_text = comp_texts[comp_choice] 
             comp_body = comp_text.format(username=username.strip(), id=id.strip(), chat_link=chat_link.strip(),
                                           violation_link=violation_link.strip())
-            try:
-                send_email(receiver, sender_email, sender_password, 'Жалоба на аккаунт телеграм', comp_body)
-                print(f"Отправлено на {receiver} от {sender_email}!")
-                await message.answer(f"Отправлено на {receiver} от {sender_email}!")
-            except Exception as e:
-                print(f"Произошла ошибка: {e}")
-                await message.answer("Произошла ошибка при отправке сообщения.")
+            send_email(receiver, sender_email, sender_password, 'Жалоба на аккаунт телеграм', comp_body)
+            print(f"Отправлено на {receiver} от {sender_email}!")
+            await message.answer(f"Отправлено на {receiver} от {sender_email}!")
+
             await asyncio.sleep(5)
+        await message.answer(f"Атака закончилась...")
+        
 
 
 
