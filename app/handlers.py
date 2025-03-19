@@ -512,19 +512,23 @@ async def process_violation_link(message: Message, state: FSMContext):
     }
 
     for sender_email, sender_password in senders.items():
-        await message.answer(f"Атака началась!!")
-        schet=0
-        await message.answer(f"Отправлено  {schet} из 500")
+        await message.answer("Атака началась!!")
+        schet = 0
+        status_message = await message.answer(f"Отправлено {schet} из 500")
+    
         for receiver in receivers:
-            comp_text = comp_texts[comp_choice] 
-            comp_body = comp_text.format(username=username.strip(), id=id.strip(), chat_link=chat_link.strip(),
-                                          violation_link=violation_link.strip())
-            send_email(receiver, sender_email, sender_password, 'Жалоба на аккаунт телеграм', comp_body)
-            schet+=1
-            await message.status.edit_text(f"Отправлено  {schet} из 500")
-
+            comp_text = comp_texts[comp_choice]
+            comp_body = comp_text.format(username=username.strip(), id=id.strip(),
+                                        chat_link=chat_link.strip(),
+                                        violation_link=violation_link.strip())
+        
+            await send_email(receiver, sender_email, sender_password, 
+                            'Жалоба на аккаунт телеграм', comp_body)
+            schet += 1
+            await status_message.edit_text(f"Отправлено {schet} из 500")
             await asyncio.sleep(5)
-        await message.answer(f"Атака закончилась...")
+
+        await message.answer("Атака закончилась...")
         
 
 
