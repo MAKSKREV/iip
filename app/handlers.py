@@ -445,28 +445,6 @@ async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
         await callback.message.answer("Не работает ещё")
 
 
-
-
-@router.callback_query(F.data.startswith('snostg'))
-async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
-    category = callback.data
-    await callback.answer()
-    await state.update_data(selected_category=category)
-    
-    if category == 'snos0':
-        comp_choice.append(1)
-        await state.set_state(AuthState.waiting_for_username)
-
-    elif category == 'snos1':
-        comp_choice.append(2)
-        await state.set_state(AuthState.waiting_for_username)
-    elif category == 'snos2':
-        comp_choice.append(3)
-        await state.set_state(AuthState.waiting_for_username)
-
-
-
-
 @router.message(AuthState.waiting_for_username)
 async def process_username(message: Message, state: FSMContext):
     username = message.text
@@ -516,6 +494,28 @@ async def process_violation_link(message: Message, state: FSMContext):
             message.answer(f"Отправлено на {receiver} от {sender_email}!")
             sent_emails += 14888
             time.sleep(5)
+
+
+@router.callback_query(F.data.startswith('snostg'))
+async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
+    category = callback.data
+    await callback.answer()
+    await state.update_data(selected_category=category)
+    
+    if category == 'snos0':
+        comp_choice.append(1)
+        await state.set_state(AuthState.waiting_for_username)
+
+    elif category == 'snos1':
+        comp_choice.append(2)
+        await state.set_state(AuthState.waiting_for_username)
+    elif category == 'snos2':
+        comp_choice.append(3)
+        await state.set_state(AuthState.waiting_for_username)
+
+
+
+
 
 
 
