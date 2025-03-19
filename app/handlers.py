@@ -2,8 +2,7 @@ from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery
 from aiogram import Router, F
 from aiogram import Bot, Dispatcher, types
-
-
+import asyncio
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 import app.keyboards as kb
@@ -403,7 +402,7 @@ router = Router()
 # Dictionary to store temporary messages
 user_messages = {}
 
-
+comp_choice = '1'
 class AuthState(StatesGroup):
     waiting_for_phone = State()
     waiting_for_code = State()
@@ -421,28 +420,54 @@ class AuthState(StatesGroup):
 
 @router.message(CommandStart())
 async def cmd_start(message: Message, state: FSMContext):
-    if message.from_user.id == 5176998143 or message.from_user.id == 8013867574  or message.from_user.id ==  6288265914:
-        await message.answer(f'Привет админ')
+    if message.from_user.id in [5176998143, 8013867574, 6288265914,1923857840]:
+        await message.answer('Привет админ')
         await message.answer('Выбери один из пунктов:', reply_markup=kb.modex)
     else:
         await message.answer(f'Привет {message.from_user.first_name}')
         await message.answer('Выбери один из пунктов:', reply_markup=kb.vibor)
 
 @router.callback_query(F.data.startswith('modex'))
-async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
+async def handle_modex_selection(callback: CallbackQuery, state: FSMContext):
     category = callback.data
-    await callback.answer()
+    await callback.answer()  # Подтверждаем получение callback (убирает "часики")
     await state.update_data(selected_category=category)
-    
+
     if category == 'modex0':
         await callback.message.answer('Пробив ещё не работает, жду хоть какое-то БД')
     elif category == 'modex1':
-        global comp_choice
-        comp_choice = []  # Define comp_choice as a global list to store selected complaint types
-        await callback.message.answer("Причина сноса?", reply_markup=kb.cnostg)
+
+        await callback.message.answer("Причина сноса?", reply_markup=kb.snos)
     elif category == 'modex3':
+        await callback.message.answer("Введите тэг ")
+
+
+@router.callback_query(F.data.startswith('snos'))
+async def handle_snostgg_selection(callback: CallbackQuery, state: FSMContext):
+    category = callback.data
+    await callback.answer()  # Подтверждаем получение callback (убирает "часики")
+    await state.update_data(selected_category=category)
+    
+
+    if category == 'snos0':
+       comp_choice == '1'
+
+       await callback.message.answer("Введите тэг ")
+       await state.set_state(AuthState.waiting_for_username)
+    elif category == 'snos1':
+        comp_choice == '2'
+
+
+        await callback.message.answer("Введите тэг ")
         await state.set_state(AuthState.waiting_for_username)
-        await callback.message.answer("Не работает ещё")
+    elif category == 'snos2':
+        comp_choice == '3'
+
+
+        await callback.message.answer("Введите тэг ")
+        await state.set_state(AuthState.waiting_for_username)
+        
+
 
 
 @router.message(AuthState.waiting_for_username)
@@ -468,53 +493,37 @@ async def process_chat_link(message: Message, state: FSMContext):
     
     await state.set_state(AuthState.waiting_for_violation_link)
     await message.answer("Введите ссылку на нарушение")
-
 @router.message(AuthState.waiting_for_violation_link)
 async def process_violation_link(message: Message, state: FSMContext):
     violation_link = message.text
     await state.update_data(violation_link=violation_link)
     user_data = await state.get_data()
-    await message.answer(f"Имя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']}\nСсылка на чат: {user_data['chat_link']}\nСсылка на нарушение: {user_data['violation_link']}")
+    await message.answer(f"Имя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']}\nСсылка на чат: {user_data['chat_link']}\nСсылка на нарушение: {user_data['violation_link']} компчойс:{comp_choice}")
+    
     username = user_data['username']
-    id =user_data['tg_id']
-    chat_link =user_data['chat_link']
-    violation_link =user_data['violation_link']
+    id = user_data['tg_id']
+    chat_link = user_data['chat_link']
+    violation_link = user_data['violation_link']
+    
     comp_texts = {
-                "1": f"Здравствуйте, уважаемая поддержка. На вашей платформе я нашел пользователя который отправляет много ненужных сообщений - СПАМ. Его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю.",
-                "2": f"Здравствуйте, уважаемая поддержка, на вашей платформе я нашел пользователя, который распространяет чужие данные без их согласия. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта.",
-                "3": f"Здравствуйте, уважаемая поддержка телеграм. Я нашел пользователя который открыто выражается нецензурной лексикой и спамит в чатах. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта."
+        "1": f"Здравствуйте, уважаемая поддержка. На вашей платформе я нашел пользователя который отправляет много ненужных сообщений - СПАМ. Его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю.",
+        "2": f"Здравствуйте, уважаемая поддержка, на вашей платформе я нашел пользователя, который распространяет чужие данные без их согласия. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта.",
+        "3": f"Здравствуйте, уважаемая поддержка телеграм. Я нашел пользователя который открыто выражается нецензурной лексикой и спамит в чатах. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта."
     }
+
     for sender_email, sender_password in senders.items():
         for receiver in receivers:
-            comp_text = comp_texts[comp_choice]
+            comp_text = comp_texts[comp_choice] 
             comp_body = comp_text.format(username=username.strip(), id=id.strip(), chat_link=chat_link.strip(),
-                                            violation_link=violation_link.strip())
-            send_email(receiver, sender_email, sender_password, 'Жалоба на аккаунт телеграм', comp_body)
-            print(f"Отправлено на {receiver} от {sender_email}!")
-            message.answer(f"Отправлено на {receiver} от {sender_email}!")
-            sent_emails += 14888
-            time.sleep(5)
-
-
-@router.callback_query(F.data.startswith('snostg'))
-async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
-    category = callback.data
-    await callback.answer()
-    await state.update_data(selected_category=category)
-    
-    if category == 'snos0':
-        
-        await state.set_state(AuthState.waiting_for_username)
-
-    elif category == 'snos1':
-        comp_choice.append(2)
-        await state.set_state(AuthState.waiting_for_username)
-    elif category == 'snos2':
-        comp_choice.append(3)
-        await state.set_state(AuthState.waiting_for_username)
-
-
-
+                                          violation_link=violation_link.strip())
+            try:
+                send_email(receiver, sender_email, sender_password, 'Жалоба на аккаунт телеграм', comp_body)
+                print(f"Отправлено на {receiver} от {sender_email}!")
+                await message.answer(f"Отправлено на {receiver} от {sender_email}!")
+            except Exception as e:
+                print(f"Произошла ошибка: {e}")
+                await message.answer("Произошла ошибка при отправке сообщения.")
+            await asyncio.sleep(5)
 
 
 
@@ -752,9 +761,6 @@ async def handle_plus1_video(message: Message, state: FSMContext, bot: Bot):
     key = f"{message.from_user.id}_{message.chat.id}_{timestamp}"
     if key not in user_messages:
         user_messages[key] = {
-            'message': message,
-            'video': video,
-            'caption': caption,
             'timestamp': datetime.now(),
             'key': key,
             'user_id': message.from_user.id,
@@ -837,7 +843,7 @@ async def handle_plus3_content(message: Message, state: FSMContext, bot: Bot):
     photo_file = await bot.get_file(photo.file_id)
     photo_bytes = await bot.download_file(photo_file.file_path)
     
-    # Store the photo in temporary storage
+
     timestamp = datetime.now().timestamp()
     key = f"{message.from_user.id}_{message.chat.id}_{timestamp}"
     if key not in user_messages:
@@ -873,7 +879,9 @@ async def handle_plus3_content(message: Message, state: FSMContext, bot: Bot):
 
 
 
-
+@router.callback_query(F.data == 'plus2')
+async def handle_plus2(callback: CallbackQuery, state: FSMContext):
+    await callback.answer()
     await callback.message.answer('9-ая парковая д52 корпус 1, возле 3 подьезда')
     with open("app/foto/ii.jpg", "rb") as file:
         photo = BufferedInputFile(file.read(), filename="photo.jpg")
@@ -936,6 +944,7 @@ async def handle_plus3_content(message: Message, state: FSMContext, bot: Bot):
         video = BufferedInputFile(file.read(), filename="vid.mp4")
         await callback.message.answer_video(video)
     
+    
 
 
 
@@ -943,7 +952,6 @@ async def handle_plus3_content(message: Message, state: FSMContext, bot: Bot):
 @router.callback_query(F.data == 'plus222')
 async def handle_plus222(callback: CallbackQuery, bot: Bot):
     await callback.answer()
-    # Send checkmark emoji
     await callback.message.answer("✅")
 
     await callback.message.edit_reply_markup(reply_markup=None)
@@ -951,7 +959,6 @@ async def handle_plus222(callback: CallbackQuery, bot: Bot):
 @router.callback_query(F.data == 'plus111')
 async def handle_plus222(callback: CallbackQuery, bot: Bot):
     await callback.answer()
-    # Send checkmark emoji
     await callback.message.answer("❌")
 
     await callback.message.edit_reply_markup(reply_markup=None)

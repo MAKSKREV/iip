@@ -19,22 +19,17 @@ vopros1 = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Не
 
                                      
 ])
-modex= InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='BlackTriad',callback_data='modex0')],
+modex= InlineKeyboardMarkup(inline_keyboard=[
                                      [InlineKeyboardButton(text='Снос тг',callback_data='modex1')],
-                                     [InlineKeyboardButton(text='Ответы на домашку модекса',callback_data='modex3')],
                                      [InlineKeyboardButton(text='Граффити',callback_data='kat0')],
                                      [InlineKeyboardButton(text='Предложка',callback_data='kat1')],
                                      [InlineKeyboardButton(text='Разбан в чате', callback_data='kat2')],
 
                                      
 ])
-cnostg= InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='СНОСИНГ',callback_data='snos0')],
+snos = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='СНОСИНГ',callback_data='snos0')],
                                      [InlineKeyboardButton(text='Б0БСИНГ',callback_data='snos1')],
                                      [InlineKeyboardButton(text='ТРОЛЛЕНГ',callback_data='snos2')],
-                                     [InlineKeyboardButton(text='ПР0ДАЖА/РЕКЛАМА НАРК0ТЫ',callback_data='snos3')],
-                                     [InlineKeyboardButton(text='КУРАТ0РСТВО В НАРК0ШОПЕ',callback_data='snos4')],
-                                     [InlineKeyboardButton(text='ПРОДАЖА ЦП',callback_data='snos5')],
-                                     [InlineKeyboardButton(text='ВbIМ0ГАНUЕ UНТUМНЫХ ФОТО У НЕСОВЕРШЕННОЛЕТНUХ', callback_data='snos6')],
 
                                      
 ])
