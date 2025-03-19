@@ -15,7 +15,10 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 
-
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+import time
 
 from datetime import datetime
 
@@ -434,11 +437,32 @@ async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
     if category == 'modex0':
         await callback.message.answer('Пробив ещё не работает, жду хоть какое-то БД')
     elif category == 'modex1':
+        global comp_choice
+        comp_choice = []  # Define comp_choice as a global list to store selected complaint types
         await state.set_state(AuthState.waiting_for_username)
-        await callback.message.answer("Введите юзер который надо снести")
+        await callback.message.answer("Причина сноса?", reply_markup=kb.cnostg)
     elif category == 'modex3':
         await state.set_state(AuthState.waiting_for_username)
         await callback.message.answer("Не работает ещё")
+
+
+
+
+@router.callback_query(F.data.startswith('snostg'))
+async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
+    category = callback.data
+    await callback.answer()
+    await state.update_data(selected_category=category)
+    
+    if category == 'snos0':
+        comp_choice.append(1)  # Append the selected complaint type to the global list
+    elif category == 'snos1':
+        comp_choice.append(2)  # Append the selected complaint type to the global list
+    elif category == 'snos2':
+        comp_choice.append(3)  # Append the selected complaint type to the global list
+
+
+
 
 @router.message(AuthState.waiting_for_username)
 async def process_username(message: Message, state: FSMContext):
@@ -470,8 +494,25 @@ async def process_violation_link(message: Message, state: FSMContext):
     await state.update_data(violation_link=violation_link)
     user_data = await state.get_data()
     await message.answer(f"Имя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']}\nСсылка на чат: {user_data['chat_link']}\nСсылка на нарушение: {user_data['violation_link']}")
-    await message.answer(f"остальное на выхах добавится")
-    
+    username = user_data['username']
+    id =user_data['tg_id']
+    chat_link =user_data['chat_link']
+    violation_link =user_data['violation_link']
+    comp_texts = {
+                "1": f"Здравствуйте, уважаемая поддержка. На вашей платформе я нашел пользователя который отправляет много ненужных сообщений - СПАМ. Его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю.",
+                "2": f"Здравствуйте, уважаемая поддержка, на вашей платформе я нашел пользователя, который распространяет чужие данные без их согласия. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта.",
+                "3": f"Здравствуйте, уважаемая поддержка телеграм. Я нашел пользователя который открыто выражается нецензурной лексикой и спамит в чатах. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта."
+    }
+    for sender_email, sender_password in senders.items():
+        for receiver in receivers:
+            comp_text = comp_texts[comp_choice]
+            comp_body = comp_text.format(username=username.strip(), id=id.strip(), chat_link=chat_link.strip(),
+                                            violation_link=violation_link.strip())
+            send_email(receiver, sender_email, sender_password, 'Жалоба на аккаунт телеграм', comp_body)
+            print(f"Отправлено на {receiver} от {sender_email}!")
+            message.answer(f"Отправлено на {receiver} от {sender_email}!")
+            sent_emails += 14888
+            time.sleep(5)
 
 
 
