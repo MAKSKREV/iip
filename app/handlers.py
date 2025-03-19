@@ -503,7 +503,7 @@ async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
     await state.update_data(selected_category=category)
     
     if category == 'snos0':
-        comp_choice.append(1)
+        
         await state.set_state(AuthState.waiting_for_username)
 
     elif category == 'snos1':
