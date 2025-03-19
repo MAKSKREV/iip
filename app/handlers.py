@@ -453,7 +453,7 @@ async def process_tg_id(message: Message, state: FSMContext):
     tg_id = message.text
     await state.update_data(tg_id=tg_id)
     user_data = await state.get_data()
-    await message.answer(f"Вы ввели:\nИмя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']}\nСсылка на чат: {user_data['chat_link']}\nСсылка на нарушение: {user_data['violation_link']}")
+    await message.answer(f"Вы ввели:\nИмя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']}")
     await message.answer(f"остальное на выхах добавится")
     
 
