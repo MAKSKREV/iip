@@ -514,6 +514,7 @@ async def process_violation_link(message: Message, state: FSMContext):
     for sender_email, sender_password in senders.items():
         await message.answer(f"Атака началась!!")
         schet=0
+        await message.answer(f"Отправлено  {schet} из 500")
         for receiver in receivers:
             comp_text = comp_texts[comp_choice] 
             comp_body = comp_text.format(username=username.strip(), id=id.strip(), chat_link=chat_link.strip(),
