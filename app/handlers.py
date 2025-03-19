@@ -498,7 +498,7 @@ async def process_violation_link(message: Message, state: FSMContext):
     violation_link = message.text
     await state.update_data(violation_link=violation_link)
     user_data = await state.get_data()
-    await message.answer(f"Имя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']}\nСсылка на чат: {user_data['chat_link']}\nСсылка на нарушение: {user_data['violation_link']} компчойс:{comp_choice}")
+    await message.answer(f"Имя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']}\nСсылка на чат: {user_data['chat_link']}\nСсылка на нарушение: {user_data['violation_link']} ")
     
     username = user_data['username']
     id = user_data['tg_id']
@@ -513,16 +513,19 @@ async def process_violation_link(message: Message, state: FSMContext):
 
     for sender_email, sender_password in senders.items():
         await message.answer(f"Атака началась!!")
-        schet=0
+        schet = 0
         for receiver in receivers:
-            comp_text = comp_texts[comp_choice] 
-            comp_body = comp_text.format(username=username.strip(), id=id.strip(), chat_link=chat_link.strip(),
-                                          violation_link=violation_link.strip())
-            send_email(receiver, sender_email, sender_password, 'Жалоба на аккаунт телеграм', comp_body)
-            schet+=1
-            await message.status.edit_text(f"Отправлено  {schet} из 500")
-
-            await asyncio.sleep(5)
+            try:
+                comp_text = comp_texts[comp_choice]
+                comp_body = comp_text.format(username=username.strip(), id=id.strip(), chat_link=chat_link.strip(),
+                                            violation_link=violation_link.strip())
+                await send_email(receiver, sender_email, sender_password, 'Жалоба на аккаунт телеграм', comp_body)
+                schet += 1
+                await message.status.edit_text(f"Отправлено {schet} из 500")
+                await asyncio.sleep(5)
+            except Exception as e:
+                print(f"Ошибка при отправке письма: {e}")
+                continue  # Продолжить к следующему получателю в случае ошибки
         await message.answer(f"Атака закончилась...")
         
 
