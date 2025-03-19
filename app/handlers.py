@@ -439,7 +439,6 @@ async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
     elif category == 'modex1':
         global comp_choice
         comp_choice = []  # Define comp_choice as a global list to store selected complaint types
-        await state.set_state(AuthState.waiting_for_username)
         await callback.message.answer("Причина сноса?", reply_markup=kb.cnostg)
     elif category == 'modex3':
         await state.set_state(AuthState.waiting_for_username)
@@ -455,11 +454,14 @@ async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
     await state.update_data(selected_category=category)
     
     if category == 'snos0':
-        comp_choice.append(1)  # Append the selected complaint type to the global list
+        comp_choice.append(1)
+        await state.set_state(AuthState.waiting_for_username)
     elif category == 'snos1':
-        comp_choice.append(2)  # Append the selected complaint type to the global list
+        comp_choice.append(2)
+        await state.set_state(AuthState.waiting_for_username)
     elif category == 'snos2':
-        comp_choice.append(3)  # Append the selected complaint type to the global list
+        comp_choice.append(3)
+        await state.set_state(AuthState.waiting_for_username)
 
 
 
