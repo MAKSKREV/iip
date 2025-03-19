@@ -19,7 +19,7 @@ vopros1 = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Не
 
                                      
 ])
-modex= InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Пробив тг',callback_data='modex0')],
+modex= InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='BlackTriad',callback_data='modex0')],
                                      [InlineKeyboardButton(text='Снос тг',callback_data='modex1')],
                                      [InlineKeyboardButton(text='Ответы на домашку модекса',callback_data='modex3')],
                                      [InlineKeyboardButton(text='Граффити',callback_data='kat0')],
