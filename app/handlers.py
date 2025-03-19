@@ -452,15 +452,25 @@ async def process_username(message: Message, state: FSMContext):
 async def process_tg_id(message: Message, state: FSMContext):
     tg_id = message.text
     await state.update_data(tg_id=tg_id)
-    user_data = await state.get_data()
-    await message.answer(f"Вы ввели:\nИмя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']}")
-    await message.answer(f"остальное на выхах добавится")
     
+    await state.set_state(AuthState.waiting_for_chat_link)
+    await message.answer("Введите ссылку на чат")
 
+@router.message(AuthState.waiting_for_chat_link)
+async def process_chat_link(message: Message, state: FSMContext):
+    chat_link = message.text
+    await state.update_data(chat_link=chat_link)
+    
+    await state.set_state(AuthState.waiting_for_violation_link)
+    await message.answer("Введите ссылку на нарушение")
 
-
-
-
+@router.message(AuthState.waiting_for_violation_link)
+async def process_violation_link(message: Message, state: FSMContext):
+    violation_link = message.text
+    await state.update_data(violation_link=violation_link)
+    user_data = await state.get_data()
+    await message.answer(f"Имя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']}\nСсылка на чат: {user_data['chat_link']}\nСсылка на нарушение: {user_data['violation_link']}")
+    await message.answer(f"остальное на выхах добавится")
     
 
 
