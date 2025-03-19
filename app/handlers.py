@@ -420,7 +420,7 @@ class AuthState(StatesGroup):
 
 @router.message(CommandStart())
 async def cmd_start(message: Message, state: FSMContext):
-    if message.from_user.id in [5176998143, 8013867574, 6288265914,1923857840]:
+    if message.from_user.id in [5176998143, 8013867574, 6288265914,1923857840,892064130,829998947]:
         await message.answer('Привет админ')
         await message.answer('Выбери один из пунктов:', reply_markup=kb.modex)
     else:
@@ -445,7 +445,7 @@ async def handle_modex_selection(callback: CallbackQuery, state: FSMContext):
 @router.callback_query(F.data.startswith('snos'))
 async def handle_snostgg_selection(callback: CallbackQuery, state: FSMContext):
     category = callback.data
-    await callback.answer()  # Подтверждаем получение callback (убирает "часики")
+    await callback.answer()  
     await state.update_data(selected_category=category)
     
 
@@ -683,7 +683,6 @@ async def handle_kat1_text(message: Message, state: FSMContext, bot: Bot):
         }
         print(f"Stored text message before forwarding to group with key {key}")
 
-    # Send to group
     await bot.send_message(
         chat_id=GROUP_ID,
         text=f"Текст сообщения:\n{text}"
