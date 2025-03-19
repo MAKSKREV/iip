@@ -510,7 +510,7 @@ async def process_violation_link(message: Message, state: FSMContext):
         "2": f"Здравствуйте, уважаемая поддержка, на вашей платформе я нашел пользователя, который распространяет чужие данные без их согласия. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта.",
         "3": f"Здравствуйте, уважаемая поддержка телеграм. Я нашел пользователя который открыто выражается нецензурной лексикой и спамит в чатах. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта."
     }
-
+    await message.answer(f"Атака началась!!")
     for sender_email, sender_password in senders.items():
         await message.answer(f"Атака началась!!")
         for receiver in receivers:
@@ -521,7 +521,7 @@ async def process_violation_link(message: Message, state: FSMContext):
 
 
             await asyncio.sleep(5)
-        await message.answer(f"Атака закончилась...")
+    await message.answer(f"Атака закончилась...")
         
 
 
