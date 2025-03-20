@@ -450,18 +450,18 @@ async def handle_snostgg_selection(callback: CallbackQuery, state: FSMContext):
     
 
     if category == 'snos0':
-       comp_choice == '1'
+       comp_choice = '1'
 
        await callback.message.answer("Введите тэг ")
        await state.set_state(AuthState.waiting_for_username)
     elif category == 'snos1':
-        comp_choice == '2'
+        comp_choice = '2'
 
 
         await callback.message.answer("Введите тэг ")
         await state.set_state(AuthState.waiting_for_username)
     elif category == 'snos2':
-        comp_choice == '3'
+        comp_choice = '3'
 
 
         await callback.message.answer("Введите тэг ")
