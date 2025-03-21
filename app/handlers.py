@@ -570,7 +570,7 @@ async def process_violation_link(message: Message, state: FSMContext):
         "3": f"Здравствуйте, уважаемая поддержка телеграм. Я нашел пользователя который открыто выражается нецензурной лексикой и спамит в чатах. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта."
     }
     comp_text = comp_texts['1']
-    await message.answer(f"Вот по такой причине сносим акк,норм?{comp_text}")
+    await message.answer(f"Вот по такой причине сносим акк:{comp_text}")
     await message.answer(f"Атака началась!!")
     
     for sender_email, sender_password in senders.items():
@@ -633,7 +633,7 @@ async def process_violation_link1(message: Message, state: FSMContext):
         "3": f"Здравствуйте, уважаемая поддержка телеграм. Я нашел пользователя который открыто выражается нецензурной лексикой и спамит в чатах. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта."
     }
     comp_text = comp_texts['2']
-    await message.answer(f"Вот по такой причине сносим акк,норм?{comp_text}")
+    await message.answer(f"Вот по такой причине сносим акк:{comp_text}")
     await message.answer(f"Атака началась!!")
     
     for sender_email, sender_password in senders.items():
@@ -692,7 +692,7 @@ async def process_violation_link2(message: Message, state: FSMContext):
         "3": f"Здравствуйте, уважаемая поддержка телеграм. Я нашел пользователя который открыто выражается нецензурной лексикой и спамит в чатах. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта."
     }
     comp_text = comp_texts['3']
-    await message.answer(f"Вот по такой причине сносим акк,норм?{comp_text}")
+    await message.answer(f"Вот по такой причине сносим акк:{comp_text}")
     await message.answer(f"Атака началась!!")
     
     for sender_email, sender_password in senders.items():
@@ -737,7 +737,7 @@ async def process_tg_id3(message: Message, state: FSMContext):
             }
     await message.answer(f"Атака началась!!")
     comp_text = comp_texts['4']
-    await message.answer(f"Вот по такой причине сносим акк,норм?{comp_text}")
+    await message.answer(f"Вот по такой причине сносим акк:{comp_text}")
     
     for sender_email, sender_password in senders.items():
         for receiver in receivers:
@@ -778,7 +778,7 @@ async def process_tg_id4(message: Message, state: FSMContext):
             }
     await message.answer(f"Атака началась!!")
     comp_text = comp_texts['6']
-    await message.answer(f"Вот по такой причине сносим акк,норм?{comp_text}")
+    await message.answer(f"Вот по такой причине сносим акк:{comp_text}")
     
     for sender_email, sender_password in senders.items():
                 for receiver in receivers:
@@ -819,7 +819,7 @@ async def process_tg_id5(message: Message, state: FSMContext):
             }
     await message.answer(f"Атака началась!!")
     comp_text = comp_texts['5']
-    await message.answer(f"Вот по такой причине сносим акк,норм?{comp_text}")
+    await message.answer(f"Вот по такой причине сносим акк:{comp_text}")
     
     for sender_email, sender_password in senders.items():
                 for receiver in receivers:
