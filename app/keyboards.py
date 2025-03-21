@@ -30,6 +30,9 @@ modex= InlineKeyboardMarkup(inline_keyboard=[
 snos = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='ЗА СПАМ, РЕКЛАМУ',callback_data='snos0')],
                                      [InlineKeyboardButton(text='ЗА ДОКСUНГ',callback_data='snos1')],
                                      [InlineKeyboardButton(text='ЗА ТРОЛЛUНГ(ОСК)',callback_data='snos2')],
+                                     [InlineKeyboardButton(text='ПР0СТ0 СН0С (НЕ ЭФФЕКТUВЕН)',callback_data='snos3')],
+                                     [InlineKeyboardButton(text='С премкой(ибо нехуй с премкой сидеть)',callback_data='snos4')],
+                                     [InlineKeyboardButton(text='С вирт номером',callback_data='snos5')],
 
                                      
 ])

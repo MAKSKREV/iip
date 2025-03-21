@@ -265,7 +265,7 @@ router = Router()
 
 # Dictionary to store temporary messages
 user_messages = {}
-
+global comp_choice
 comp_choice = '1'
 class AuthState(StatesGroup):
     waiting_for_phone = State()
@@ -276,11 +276,33 @@ class AuthState(StatesGroup):
     waiting_for_kat2_content = State()
     waiting_for_plus22_content = State()
     waiting_for_plus222_content = State()
+
     waiting_for_username = State()
     waiting_for_tg_id = State()
     waiting_for_chat_link = State()
     waiting_for_violation_link = State()
-    waiting_for_age = State()
+
+    waiting_for_username1 = State()
+    waiting_for_tg_id1 = State()
+    waiting_for_chat_link1 = State()
+    waiting_for_violation_link1 = State()
+
+    waiting_for_username2 = State()
+    waiting_for_tg_id2 = State()
+    waiting_for_chat_link2 = State()
+    waiting_for_violation_link2 = State()
+
+
+    waiting_for_username3 = State()
+    waiting_for_tg_id3 = State()
+
+    waiting_for_username4 = State()
+    waiting_for_tg_id4 = State()
+
+    waiting_for_username5 = State()
+    waiting_for_tg_id5 = State()
+
+
 
 @router.message(CommandStart())
 async def cmd_start(message: Message, state: FSMContext):
@@ -314,22 +336,40 @@ async def handle_snostgg_selection(callback: CallbackQuery, state: FSMContext):
     
 
     if category == 'snos0':
-       comp_choice = '1'
+
 
        await callback.message.answer("Введите тэг ")
        await state.set_state(AuthState.waiting_for_username)
     elif category == 'snos1':
-        comp_choice = '2'
+
 
 
         await callback.message.answer("Введите тэг ")
-        await state.set_state(AuthState.waiting_for_username)
+        await state.set_state(AuthState.waiting_for_username1)
     elif category == 'snos2':
-        comp_choice = '3'
+
 
 
         await callback.message.answer("Введите тэг ")
-        await state.set_state(AuthState.waiting_for_username)
+        await state.set_state(AuthState.waiting_for_username2)
+    elif category == 'snos3':
+
+
+
+        await callback.message.answer("Введите тэг ")
+        await state.set_state(AuthState.waiting_for_username3)
+    elif category == 'snos4':
+
+
+
+        await callback.message.answer("Введите тэг ")
+        await state.set_state(AuthState.waiting_for_username4)
+    elif category == 'snos5':
+
+
+
+        await callback.message.answer("Введите тэг ")
+        await state.set_state(AuthState.waiting_for_username5)
         
 
 
@@ -362,7 +402,7 @@ async def process_violation_link(message: Message, state: FSMContext):
     violation_link = message.text
     await state.update_data(violation_link=violation_link)
     user_data = await state.get_data()
-    await message.answer(f"Имя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']}\nСсылка на чат: {user_data['chat_link']}\nСсылка на нарушение: {user_data['violation_link']} компчойс:{comp_choice}")
+    await message.answer(f"Имя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']}\nСсылка на чат: {user_data['chat_link']}\nСсылка на нарушение: {user_data['violation_link']}  ")
     
     username = user_data['username']
     id = user_data['tg_id']
@@ -374,10 +414,14 @@ async def process_violation_link(message: Message, state: FSMContext):
         "2": f"Здравствуйте, уважаемая поддержка, на вашей платформе я нашел пользователя, который распространяет чужие данные без их согласия. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта.",
         "3": f"Здравствуйте, уважаемая поддержка телеграм. Я нашел пользователя который открыто выражается нецензурной лексикой и спамит в чатах. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта."
     }
+    comp_text = comp_texts['1']
+    await message.answer(f"Вот по такой причине сносим акк,норм?{comp_text}")
     await message.answer(f"Атака началась!!")
+    
     for sender_email, sender_password in senders.items():
         for receiver in receivers:
-            comp_text = comp_texts[comp_choice] 
+            
+            print(comp_text)
             comp_body = comp_text.format(username=username.strip(), id=id.strip(), chat_link=chat_link.strip(),
                                           violation_link=violation_link.strip())
             send_email(receiver, sender_email, sender_password, 'Жалоба на аккаунт телеграм', comp_body)
@@ -393,7 +437,242 @@ async def process_violation_link(message: Message, state: FSMContext):
 
         
     
+@router.message(AuthState.waiting_for_username1)
+async def process_username1(message: Message, state: FSMContext):
+    username = message.text
+    await state.update_data(username=username)
+    
+    await state.set_state(AuthState.waiting_for_tg_id1)
+    await message.answer("Введите тг айди")
 
+@router.message(AuthState.waiting_for_tg_id1)
+async def process_tg_id1(message: Message, state: FSMContext):
+    tg_id = message.text
+    await state.update_data(tg_id=tg_id)
+    
+    await state.set_state(AuthState.waiting_for_chat_link1)
+    await message.answer("Введите ссылку на чат")
+
+@router.message(AuthState.waiting_for_chat_link1)
+async def process_chat_link1(message: Message, state: FSMContext):
+    chat_link = message.text
+    await state.update_data(chat_link=chat_link)
+    
+    await state.set_state(AuthState.waiting_for_violation_link1)
+    await message.answer("Введите ссылку на нарушение")
+@router.message(AuthState.waiting_for_violation_link1)
+async def process_violation_link1(message: Message, state: FSMContext):
+    violation_link = message.text
+    await state.update_data(violation_link=violation_link)
+    user_data = await state.get_data()
+    await message.answer(f"Имя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']}\nСсылка на чат: {user_data['chat_link']}\nСсылка на нарушение: {user_data['violation_link']}  ")
+    
+    username = user_data['username']
+    id = user_data['tg_id']
+    chat_link = user_data['chat_link']
+    violation_link = user_data['violation_link']
+    
+    comp_texts = {
+        "1": f"Здравствуйте, уважаемая поддержка. На вашей платформе я нашел пользователя который отправляет много ненужных сообщений - СПАМ. Его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю.",
+        "2": f"Здравствуйте, уважаемая поддержка, на вашей платформе я нашел пользователя, который распространяет чужие данные без их согласия. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта.",
+        "3": f"Здравствуйте, уважаемая поддержка телеграм. Я нашел пользователя который открыто выражается нецензурной лексикой и спамит в чатах. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта."
+    }
+    comp_text = comp_texts['2']
+    await message.answer(f"Вот по такой причине сносим акк,норм?{comp_text}")
+    await message.answer(f"Атака началась!!")
+    
+    for sender_email, sender_password in senders.items():
+        for receiver in receivers:
+            
+            print(comp_text)
+            comp_body = comp_text.format(username=username.strip(), id=id.strip(), chat_link=chat_link.strip(),
+                                          violation_link=violation_link.strip())
+            send_email(receiver, sender_email, sender_password, 'Жалоба на аккаунт телеграм', comp_body)
+
+
+            await asyncio.sleep(5)
+    await message.answer(f"Атака закончилась...")
+
+
+
+
+@router.message(AuthState.waiting_for_username2)
+async def process_username2(message: Message, state: FSMContext):
+    username = message.text
+    await state.update_data(username=username)
+    
+    await state.set_state(AuthState.waiting_for_tg_id2)
+    await message.answer("Введите тг айди")
+
+@router.message(AuthState.waiting_for_tg_id2)
+async def process_tg_id2(message: Message, state: FSMContext):
+    tg_id = message.text
+    await state.update_data(tg_id=tg_id)
+    
+    await state.set_state(AuthState.waiting_for_chat_link2)
+    await message.answer("Введите ссылку на чат")
+
+@router.message(AuthState.waiting_for_chat_link2)
+async def process_chat_link2(message: Message, state: FSMContext):
+    chat_link = message.text
+    await state.update_data(chat_link=chat_link)
+    
+    await state.set_state(AuthState.waiting_for_violation_link2)
+    await message.answer("Введите ссылку на нарушение")
+@router.message(AuthState.waiting_for_violation_link2)
+async def process_violation_link2(message: Message, state: FSMContext):
+    violation_link = message.text
+    await state.update_data(violation_link=violation_link)
+    user_data = await state.get_data()
+    await message.answer(f"Имя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']}\nСсылка на чат: {user_data['chat_link']}\nСсылка на нарушение: {user_data['violation_link']}  ")
+    
+    username = user_data['username']
+    id = user_data['tg_id']
+    chat_link = user_data['chat_link']
+    violation_link = user_data['violation_link']
+    
+    comp_texts = {
+        "1": f"Здравствуйте, уважаемая поддержка. На вашей платформе я нашел пользователя который отправляет много ненужных сообщений - СПАМ. Его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю.",
+        "2": f"Здравствуйте, уважаемая поддержка, на вашей платформе я нашел пользователя, который распространяет чужие данные без их согласия. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта.",
+        "3": f"Здравствуйте, уважаемая поддержка телеграм. Я нашел пользователя который открыто выражается нецензурной лексикой и спамит в чатах. его юзернейм - {username}, его айди - {id}, ссылка на чат - {chat_link}, ссылка на нарушение/нарушения - {violation_link}. Пожалуйста примите меры по отношению к данному пользователю путем блокировки его акккаунта."
+    }
+    comp_text = comp_texts['3']
+    await message.answer(f"Вот по такой причине сносим акк,норм?{comp_text}")
+    await message.answer(f"Атака началась!!")
+    
+    for sender_email, sender_password in senders.items():
+        for receiver in receivers:
+        
+            print(comp_text)
+            comp_body = comp_text.format(username=username.strip(), id=id.strip(), chat_link=chat_link.strip(),
+                                          violation_link=violation_link.strip())
+            send_email(receiver, sender_email, sender_password, 'Жалоба на аккаунт телеграм', comp_body)
+
+
+            await asyncio.sleep(5)
+    await message.answer(f"Атака закончилась...")
+
+
+
+
+
+@router.message(AuthState.waiting_for_username3)
+async def process_username3(message: Message, state: FSMContext):
+    username = message.text
+    await state.update_data(username=username)
+    
+    await state.set_state(AuthState.waiting_for_tg_id3)
+    await message.answer("Введите тг айди")
+
+@router.message(AuthState.waiting_for_tg_id3)
+async def process_tg_id3(message: Message, state: FSMContext):
+    tg_id = message.text
+    await state.update_data(tg_id=tg_id)
+    user_data = await state.get_data()
+    await message.answer(f"Имя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']} ")
+    
+
+    
+    
+    username = user_data['username']
+    id = user_data['tg_id']
+    
+    comp_texts = {
+                "4": f"Здравствуйте, уважаемая поддержка. Я случайно перешел по фишинговой ссылке и утерял доступ к своему аккаунту. Его юзернейм - {username}, его айди - {id}. Пожалуйста удалите аккаунт или обнулите сессии"
+            }
+    await message.answer(f"Атака началась!!")
+    comp_text = comp_texts['4']
+    await message.answer(f"Вот по такой причине сносим акк,норм?{comp_text}")
+    
+    for sender_email, sender_password in senders.items():
+        for receiver in receivers:
+            comp_body = comp_text.format(username=username.strip(), id=id.strip())
+            send_email(receiver, sender_email, sender_password, 'Я утерял свой аккаунт в телеграм', comp_body)
+            print(f"Отправлено на {receiver} от {sender_email}!")
+            time.sleep(5)
+    await message.answer(f"Атака закончилась...")
+
+
+
+
+
+@router.message(AuthState.waiting_for_username4)
+async def process_username4(message: Message, state: FSMContext):
+    username = message.text
+    await state.update_data(username=username)
+    
+    await state.set_state(AuthState.waiting_for_tg_id4)
+    await message.answer("Введите тг айди")
+
+@router.message(AuthState.waiting_for_tg_id4)
+async def process_tg_id4(message: Message, state: FSMContext):
+    tg_id = message.text
+    await state.update_data(tg_id=tg_id)
+    user_data = await state.get_data()
+    await message.answer(f"Имя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']} ")
+    
+
+    
+    
+    username = user_data['username']
+    id = user_data['tg_id']
+    
+    comp_texts = {
+                "5": f"Добрый день поддержка Telegram!Аккаунт {username} , {id} использует виртуальный номер купленный на сайте по активации номеров. Отношения к номеру он не имеет, номер никак к нему не относиться.Прошу разберитесь с этим. Заранее спасибо!",
+                "6": f"Добрый день поддержка Telegram! Аккаунт {username} {id} приобрёл премиум в вашем мессенджере чтобы рассылать спам-сообщения и обходить ограничения Telegram.Прошу проверить данную жалобу и принять меры!"
+            }
+    await message.answer(f"Атака началась!!")
+    comp_text = comp_texts['5']
+    await message.answer(f"Вот по такой причине сносим акк,норм?{comp_text}")
+    
+    for sender_email, sender_password in senders.items():
+                for receiver in receivers:
+                    comp_text = comp_texts[comp_choice]
+                    comp_body = comp_text.format(username=username.strip(), id=id.strip())
+                    send_email(receiver, sender_email, sender_password, 'Жалоба на пользователя телеграм', comp_body)
+                    
+                    time.sleep(5)
+    await message.answer(f"Атака закончилась...")
+
+
+
+
+@router.message(AuthState.waiting_for_username5)
+async def process_username5(message: Message, state: FSMContext):
+    username = message.text
+    await state.update_data(username=username)
+    
+    await state.set_state(AuthState.waiting_for_tg_id5)
+    await message.answer("Введите тг айди")
+
+@router.message(AuthState.waiting_for_tg_id5)
+async def process_tg_id5(message: Message, state: FSMContext):
+    tg_id = message.text
+    await state.update_data(tg_id=tg_id)
+    user_data = await state.get_data()
+    await message.answer(f"Имя пользователя: {user_data['username']}\nTG ID: {user_data['tg_id']} ")
+    
+
+    
+    
+    username = user_data['username']
+    id = user_data['tg_id']
+    
+    comp_texts = {
+                "5": f"Добрый день поддержка Telegram!Аккаунт {username} , {id} использует виртуальный номер купленный на сайте по активации номеров. Отношения к номеру он не имеет, номер никак к нему не относиться.Прошу разберитесь с этим. Заранее спасибо!",
+                "6": f"Добрый день поддержка Telegram! Аккаунт {username} {id} приобрёл премиум в вашем мессенджере чтобы рассылать спам-сообщения и обходить ограничения Telegram.Прошу проверить данную жалобу и принять меры!"
+            }
+    await message.answer(f"Атака началась!!")
+    comp_text = comp_texts['6']
+    await message.answer(f"Вот по такой причине сносим акк,норм?{comp_text}")
+    
+    for sender_email, sender_password in senders.items():
+                for receiver in receivers:
+                    comp_text = comp_texts[comp_choice]
+                    comp_body = comp_text.format(username=username.strip(), id=id.strip())
+                    send_email(receiver, sender_email, sender_password, 'Жалоба на пользователя телеграм', comp_body)
+                    time.sleep(5)
+    await message.answer(f"Атака закончилась...")
 
 
 def send_email(receiver, sender_email, sender_password, subject, body):
