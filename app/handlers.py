@@ -306,7 +306,7 @@ class AuthState(StatesGroup):
 
 @router.message(CommandStart())
 async def cmd_start(message: Message, state: FSMContext):
-    if message.from_user.id in [5176998143, 8013867574, 6288265914,1923857840,829998947]:
+    if message.from_user.id in [5176998143, 8013867574, 6288265914,1923857840,829998947,892064130]:
         await message.answer('Привет админ')
         await message.answer('Выбери один из пунктов:', reply_markup=kb.modex)
     else:
