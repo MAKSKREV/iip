@@ -777,7 +777,7 @@ async def process_tg_id4(message: Message, state: FSMContext):
                 "6": f"Добрый день поддержка Telegram! Аккаунт {username} {id} приобрёл премиум в вашем мессенджере чтобы рассылать спам-сообщения и обходить ограничения Telegram.Прошу проверить данную жалобу и принять меры!"
             }
     await message.answer(f"Атака началась!!")
-    comp_text = comp_texts['5']
+    comp_text = comp_texts['6']
     await message.answer(f"Вот по такой причине сносим акк,норм?{comp_text}")
     
     for sender_email, sender_password in senders.items():
@@ -818,7 +818,7 @@ async def process_tg_id5(message: Message, state: FSMContext):
                 "6": f"Добрый день поддержка Telegram! Аккаунт {username} {id} приобрёл премиум в вашем мессенджере чтобы рассылать спам-сообщения и обходить ограничения Telegram.Прошу проверить данную жалобу и принять меры!"
             }
     await message.answer(f"Атака началась!!")
-    comp_text = comp_texts['6']
+    comp_text = comp_texts['5']
     await message.answer(f"Вот по такой причине сносим акк,норм?{comp_text}")
     
     for sender_email, sender_password in senders.items():
