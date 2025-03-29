@@ -6,7 +6,7 @@ import asyncio
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 import app.keyboards as kb
-
+from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.types import BufferedInputFile
 from config import GROUP_ID,KAT2_GROUP_ID,KAT3_GROUP_ID,TOKEN
 import smtplib
@@ -80,8 +80,11 @@ async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
     await state.update_data(selected_category=category)
     
     if category == 'modex1':
-        # Отправляем ссылку на приложение вместо запуска
-        await callback.message.answer('Запускаю приложение',url="https://makskrev-iip-appapp-fgwefy.streamlit.app/")
+        # Создаём InlineKeyboard с кнопкой, которая содержит URL
+        keyboard = InlineKeyboardMarkup().add(
+            InlineKeyboardButton("Открыть приложение", url="https://makskrev-iip-appapp-fgwefy.streamlit.app/")
+        )
+        await callback.message.answer('Запускаю приложение', reply_markup=keyboard)
     elif category == 'modex2':
         await callback.message.answer('Вывожу подарки')
     
