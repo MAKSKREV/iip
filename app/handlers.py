@@ -81,7 +81,7 @@ async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
     
     if category == 'modex1':
         # Отправляем ссылку на приложение вместо запуска
-        await callback.message.answer('Запускаю приложение. Перейдите по ссылке: https://makskrev-iip-appapp-fgwefy.streamlit.app/')
+        await callback.message.answer('Запускаю приложение',url="https://makskrev-iip-appapp-fgwefy.streamlit.app/")
     elif category == 'modex2':
         await callback.message.answer('Вывожу подарки')
     
