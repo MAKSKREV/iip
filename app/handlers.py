@@ -13,6 +13,8 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
+from aiogram import Router, types
+
 
 import smtplib
 from email.mime.text import MIMEText
@@ -78,8 +80,8 @@ async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
     await state.update_data(selected_category=category)
     
     if category == 'modex1':
-        await callback.message.answer('Запускаю приложение')
-        subprocess.Popen(["streamlit","run", "app.py"])
+        # Отправляем ссылку на приложение вместо запуска
+        await callback.message.answer('Запускаю приложение. Перейдите по ссылке: https://makskrev-iip-appapp-fgwefy.streamlit.app/')
     elif category == 'modex2':
         await callback.message.answer('Вывожу подарки')
     
