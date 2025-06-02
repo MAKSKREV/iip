@@ -20,8 +20,7 @@ vopros1 = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='Не
                                      
 ])
 modex= InlineKeyboardMarkup(inline_keyboard=[
-                                     [InlineKeyboardButton(text='Ебанутая крутилка',callback_data='modex1')],
-                                     [InlineKeyboardButton(text='Вывести подарки',callback_data='modex2')],
+                                     [InlineKeyboardButton(text='Нфт',callback_data='nft')],
                                      [InlineKeyboardButton(text='Граффити',callback_data='kat0')],
                                      [InlineKeyboardButton(text='Предложка',callback_data='kat1')],
                                      [InlineKeyboardButton(text='Разбан в чате', callback_data='kat2')],
@@ -34,6 +33,13 @@ snos = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='ЗА С
                                      [InlineKeyboardButton(text='ПР0СТ0 СН0С (НЕ ЭФФЕКТUВЕН)',callback_data='snos3')],
                                      [InlineKeyboardButton(text='С премкой(ибо нехуй с премкой сидеть)',callback_data='snos4')],
                                      [InlineKeyboardButton(text='С вирт номером',callback_data='snos5')],
+
+                                     
+])
+vibor666 = InlineKeyboardMarkup(inline_keyboard=[[InlineKeyboardButton(text='(0.75%)-5⭐️',callback_data='nft0'),
+                                     InlineKeyboardButton(text='(2%)-15⭐️',callback_data='nft1')],
+                                     [InlineKeyboardButton(text='(15%)-45⭐️',callback_data='nft2')],
+
 
                                      
 ])

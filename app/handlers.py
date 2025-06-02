@@ -12,10 +12,10 @@ from config import GROUP_ID,KAT2_GROUP_ID,KAT3_GROUP_ID,TOKEN
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
-
+from aiogram.types import  LabeledPrice
 from aiogram import Router, types
-
-
+import random
+from aiogram.utils.keyboard import InlineKeyboardBuilder
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -62,10 +62,9 @@ class AuthState(StatesGroup):
 
 
 
-
 @router.message(CommandStart())
 async def cmd_start(message: Message, state: FSMContext):
-    if message.from_user.id in [5176998143]:
+    if message.from_user.id in [5176998143,8013867574]:
         await message.answer('Привет админ')
         await message.answer('Выбери один из пунктов:', reply_markup=kb.modex)
     else:
@@ -73,20 +72,125 @@ async def cmd_start(message: Message, state: FSMContext):
         await message.answer('Выбери один из пунктов:', reply_markup=kb.vibor)
 
 
-@router.callback_query(F.data.startswith('modex'))
-async def handle_category_selection(callback: CallbackQuery, state: FSMContext):
-    category = callback.data
-    await callback.answer()
-    await state.update_data(selected_category=category)
-    
-    if category == 'modex1':
-        # Создаём InlineKeyboard с кнопкой, которая содержит URL
-        keyboard = InlineKeyboardMarkup().add(
-            InlineKeyboardButton("Открыть приложение", url="https://makskrev-iip-appapp-fgwefy.streamlit.app/")
-        )
-        await callback.message.answer('Запускаю приложение', reply_markup=keyboard)
-    elif category == 'modex2':
-        await callback.message.answer('Вывожу подарки')
+
+def payment_keyboard():
+    builder = InlineKeyboardBuilder()
+    builder.button(text=f"Заплатить⭐️", pay=True)
+    return builder.as_markup()
+
+@router.callback_query(F.data == 'cancel_payment')
+async def cancel_payment_handler(callback_query: types.CallbackQuery, state: FSMContext):
+    await callback_query.answer("Платеж отменен.")
+    await callback_query.message.delete_reply_markup() # Удалить клавиатуру с инвойсом
+    await state.clear() # Очистить состояние, если оно было активно
+
+@router.callback_query(F.data == 'nft0')
+async def send_invoice_handler_25_stars(callback_query: types.CallbackQuery, state: FSMContext):
+    await state.update_data({'stars_to_add': 5})
+    prices = [LabeledPrice(label="XTR", amount=5)]
+    await callback_query.answer()
+    await callback_query.message.answer_invoice(
+        title="Пополнить баланс",
+        description="Заплатить 5 звёзд!",
+        prices=prices,
+        provider_token="вставьте ваш токен",  # вставьте ваш токен
+        payload="channel_support_25",
+        currency="XTR",
+        reply_markup=payment_keyboard(),
+    )
+
+@router.callback_query(F.data == 'nft1')
+async def send_invoice_handler_50_stars(callback_query: types.CallbackQuery, state: FSMContext):
+    await state.update_data({'stars_to_add': 15})
+    prices = [LabeledPrice(label="XTR", amount=15)]
+    await callback_query.answer()
+    await callback_query.message.answer_invoice(
+        title="Пополнить баланс",
+        description="Заплатить 15 звёзд!",
+        prices=prices,
+        provider_token="вставьте ваш токен",
+        payload="channel_support_50",
+        currency="XTR",
+        reply_markup=payment_keyboard(),
+    )
+
+@router.callback_query(F.data == 'nft2')
+async def send_invoice_handler_100_stars(callback_query: types.CallbackQuery, state: FSMContext):
+    await state.update_data({'stars_to_add': 45})
+    prices = [LabeledPrice(label="XTR", amount=45)]
+    await callback_query.answer()
+    await callback_query.message.answer_invoice(
+        title="Пополнить баланс",
+        description="Заплатить 45 звёзд!",
+        prices=prices,
+        provider_token="вставьте ваш токен",
+        payload="channel_support_100",
+        currency="XTR",
+        reply_markup=payment_keyboard(),
+    )
+
+@router.callback_query(F.data == 'nft')
+async def send_invoice_handler(callback_query: types.CallbackQuery, state: FSMContext):
+    await callback_query.message.answer(
+    '<b>💎 НФТ (0.75%)</b>\n'
+    '— Любой (0.75%)\n\n'
+    '<b>🪐 НФТ (2%)</b>\n'
+    '— Любой (2%)\n\n'
+    '<b>🎰 НФТ (15%)</b>\n'
+    '— Любой (15%)',
+    parse_mode='HTML',
+    reply_markup=kb.vibor666
+)
+
+@router.pre_checkout_query()
+async def process_pre_checkout(pre_checkout_query: types.PreCheckoutQuery):
+    await pre_checkout_query.answer(ok=True)
+
+@router.message(F.successful_payment)
+async def successful_payment(message: types.Message, state: FSMContext):
+    data = await state.get_data()
+    stars_to_add = data.get('stars_to_add', 0)
+    if not stars_to_add:
+        await message.answer("Ошибка: количество звезд для добавления не установлено.")
+        return
+
+    # Определяем вероятность выигрыша/проигрыша в зависимости от суммы
+    if stars_to_add == 5:
+        win_probability = 0.0075  # 0.75%
+        lose_probability = 0.9325  # 93.25%
+    elif stars_to_add == 15:
+        # Можно задать свои вероятности для этого варианта
+        win_probability = 0.2  # например, 10%
+        lose_probability = 0.85  # 85%
+    elif stars_to_add == 45:
+        # И так далее
+        win_probability = 0.15
+        lose_probability = 0.80
+    else:
+        # Значение по умолчанию
+        win_probability = 0.05
+        lose_probability = 0.90
+
+    # Генерируем случайное число для определения результата
+    rand_value = random.random()
+
+    if rand_value <= win_probability:
+        result = "выиграл"
+        response_text = "Поздравляем! Вы выиграли!"
+    else:
+        result = "проиграл"
+        response_text = "К сожалению, вы проиграли."
+
+    # Ответ пользователю
+    await message.answer(response_text)
+
+    # Очистка состояния
+    await state.clear()
+
+
+
+
+
     
 
 
@@ -404,67 +508,7 @@ async def handle_plus3_content(message: Message, state: FSMContext, bot: Bot):
 @router.callback_query(F.data == 'plus2')
 async def handle_plus2(callback: CallbackQuery, state: FSMContext):
     await callback.answer()
-    await callback.message.answer('9-ая парковая д52 корпус 1, возле 3 подьезда')
-    with open("app/foto/ii.jpg", "rb") as file:
-        photo = BufferedInputFile(file.read(), filename="photo.jpg")
-        await callback.message.answer_photo(photo)
-    await callback.message.answer('9-ая парковая дом 52 корпус 1, между 1 и 2 подьездами')
-    with open("app/foto/pp.jpg", "rb") as file:
-        photo = BufferedInputFile(file.read(), filename="photo.jpg")
-        await callback.message.answer_photo(photo)
-    await callback.message.answer('11-ая Парковая улица, дом 36 строение 3')
-    with open("app/foto/bb.jpg", "rb") as file:
-        photo = BufferedInputFile(file.read(), filename="photo.jpg")
-        await callback.message.answer_photo(photo)
-        await callback.message.answer('6я парковая 29А')
-    with open("app/foto/ff.jpg", "rb") as file:
-        photo = BufferedInputFile(file.read(), filename="photo.jpg")
-        await callback.message.answer_photo(photo)
-    await callback.message.answer('Сиреневый бульвар, 23А. около входа в озон')
-    with open("app/foto/fff.jpg", "rb") as file:
-        photo = BufferedInputFile(file.read(), filename="photo.jpg")
-        await callback.message.answer_photo(photo)
-    await callback.message.answer('На перекрестке, на стороне возле дома 9-парковая 49к2')
-    with open("app/foto/ppp.jpg", "rb") as file:
-        photo = BufferedInputFile(file.read(), filename="photo.jpg")
-        await callback.message.answer_photo(photo)
-    
-    await callback.message.answer('5 парковая 64')
-    with open("app/foto/bbuuu.jpg", "rb") as file:
-        photo = BufferedInputFile(file.read(), filename="photo.jpg")
-        await callback.message.answer_photo(photo)
-    await callback.message.answer('3-я парковая улица. дом 39. корпус 1')
-    with open("app/foto/yxx.jpg", "rb") as file:
-        photo = BufferedInputFile(file.read(), filename="photo.jpg")
-        await callback.message.answer_photo(photo)
-    await callback.message.answer('Щелковский шоссе 81')
-    with open("app/foto/axx.jpg", "rb") as file:
-        photo = BufferedInputFile(file.read(), filename="photo.jpg")
-        await callback.message.answer_photo(photo)
-    await callback.message.answer('Измайловский проспект, 49')
-    with open("app/foto/exx.jpg", "rb") as file:
-        photo = BufferedInputFile(file.read(), filename="photo.jpg")
-        await callback.message.answer_photo(photo)
-    await callback.message.answer('Щелковское шоссе 69 , Пятерочка')
-    with open("app/foto/xexe.jpg", "rb") as file:
-        photo = BufferedInputFile(file.read(), filename="photo.jpg")
-        await callback.message.answer_photo(photo)
-    await callback.message.answer('9 парковка улица 57(2) , за домом')
-    with open("app/foto/xaxa.jpg", "rb") as file:
-        photo = BufferedInputFile(file.read(), filename="photo.jpg")
-        await callback.message.answer_photo(photo)
-    await callback.message.answer('Сиреневый бульвар дом 40 корпус 1')
-    with open("app/foto/xsxs.jpg", "rb") as file:
-        photo = BufferedInputFile(file.read(), filename="photo.jpg")
-        await callback.message.answer_photo(photo)
-
-    await callback.message.answer('5-я Парковая улица, 57, обе автобусные остановки')
-    await callback.message.answer('Видео или фото граффити выше нет')
-
-    await callback.message.answer('Щелковское шоссе 47, Щелковское шоссе 45а. Подземный переход')
-    with open("app/foto/vid.mp4", "rb") as file:
-        video = BufferedInputFile(file.read(), filename="vid.mp4")
-        await callback.message.answer_video(video)
+    await callback.message.answer('Граффити нет!')
     
     
 
